@@ -66,7 +66,7 @@ const (
 	dvDiskACL                           = false
 	dvDiskDatastoreID                   = "local"
 	dvDiskQuota                         = false
-	dvDiskReplicate                     = false
+	dvDiskReplicate                     = true
 	dvDiskSize                          = 4
 	dvFeaturesNesting                   = false
 	dvFeaturesKeyControl                = false
@@ -2081,7 +2081,7 @@ func containerCreateCustom(ctx context.Context, d *schema.ResourceData, m any) d
 		len(diskMountOptions) > 0 ||
 		bool(diskACL) ||
 		bool(diskQuota) ||
-		bool(diskReplicate)) {
+		!bool(diskReplicate)) {
 		// This is a special case where the rootfs size is set to a non-default value at creation time.
 		// see https://pve.proxmox.com/pve-docs/chapter-pct.html#_storage_backed_mount_points
 		rootFS = &containers.CustomRootFS{
@@ -2098,7 +2098,7 @@ func containerCreateCustom(ctx context.Context, d *schema.ResourceData, m any) d
 			rootFS.Quota = &diskQuota
 		}
 
-		if diskReplicate {
+		if !diskReplicate {
 			rootFS.Replicate = &diskReplicate
 		}
 	}

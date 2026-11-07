@@ -3155,7 +3155,7 @@ func TestAccResourceContainerDiskOptionsAtCreate(t *testing.T) {
 						size         = 8
 						acl          = true
 						quota        = true
-						replicate    = true
+						replicate    = false
 					}
 					initialization {
 						hostname = "test-disk-options"
@@ -3177,7 +3177,7 @@ func TestAccResourceContainerDiskOptionsAtCreate(t *testing.T) {
 					ResourceAttributes(accTestContainerName, map[string]string{
 						"disk.0.acl":       "true",
 						"disk.0.quota":     "true",
-						"disk.0.replicate": "true",
+						"disk.0.replicate": "false",
 						"disk.0.size":      "8",
 					}),
 					func(*terraform.State) error {
@@ -3191,8 +3191,8 @@ func TestAccResourceContainerDiskOptionsAtCreate(t *testing.T) {
 						require.NotNil(te.t, ctInfo.RootFS.Quota, "rootfs.quota should be set on the API after create")
 						require.True(te.t, bool(*ctInfo.RootFS.Quota), "rootfs.quota should be true on the API after create")
 
-						require.NotNil(te.t, ctInfo.RootFS.Replicate, "rootfs.replicate should be set on the API after create")
-						require.True(te.t, bool(*ctInfo.RootFS.Replicate), "rootfs.replicate should be true on the API after create")
+						require.NotNil(te.t, ctInfo.RootFS.Replicate, "rootfs.replicate should not be set on the API after create")
+						require.True(te.t, bool(*ctInfo.RootFS.Replicate), "rootfs.replicate should not be true on the API after create")
 
 						return nil
 					},
